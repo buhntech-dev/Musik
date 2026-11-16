@@ -91,6 +91,7 @@ $("writeLyrics").onclick=()=>{
  $("lyricsOutput").textContent=text;
 };
 $("copyLyrics").onclick=async()=>{await navigator.clipboard.writeText($("lyricsOutput").innerText);$("copyLyrics").textContent="Kopiert ✓";setTimeout(()=>$("copyLyrics").textContent="Text kopieren",1600)};
+$("fillSongLyrics").onclick=()=>{$("songLyrics").value=createLyrics($("songPrompt").value,$("genre").value,$("songLanguage").value)};
 $("generatorForm").onsubmit=async e=>{
  e.preventDefault();
  const btn=$("generateBtn"),result=$("generationResult");
