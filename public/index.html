@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b14"><meta name="description" content="Dein KI-Musikstudio: Songs, Beats, Instrumente und Mehrspur-Produktion.">
+  <title>KI-Musikstudio – Create your sound</title><link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-icon">♫</span><span>musik<span class="brand-accent">.ai</span><small>YOUR CREATIVE STUDIO</small></span></a>
+    <button class="new-project" id="newProject">＋ Neues Projekt</button>
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-item active" data-view="studio">▦ <span>Studio</span></button>
+    <button class="nav-item" data-view="generator">✧ <span>KI Songgenerator</span><b class="nav-pill">AI</b></button>
+    <button class="nav-item" data-view="lyrics">✎ <span>Songtexte</span></button>
+    <button class="nav-item" data-view="library">♫ <span>Meine Musik</span></button>
+    <div class="side-bottom"><div class="profile"><div class="avatar">D</div><div><strong>Dein Studio</strong><small>Free Workspace</small></div><span>•••</span></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="breadcrumb">Workspace</span><span class="muted"> / </span><strong id="pageTitle">Studio</strong></div><div class="top-actions"><span class="status-dot"></span><span id="serviceStatus">Studio bereit</span><button class="icon-button" id="saveProject" title="Projekt speichern">▣</button><button class="user-avatar">D</button></div></header>
+    <section class="view active" id="view-studio">
+      <div class="welcome"><div><div class="eyebrow">DEIN SOUND. DEINE REGELN.</div><h1>Mach Musik, die <span>deins ist.</span></h1><p>Von der ersten Idee bis zum fertigen Track – alles an einem Ort.</p></div><div class="welcome-orb">♫</div></div>
+      <div class="quick-grid">
+        <button class="quick-card purple" data-view="generator"><span class="quick-icon">✧</span><span class="quick-tag">KI POWERED</span><h3>Song generieren</h3><p>Beschreibe deine Idee und lass Musik entstehen.</p><b>Jetzt starten ↗</b></button>
+        <button class="quick-card blue" data-view="lyrics"><span class="quick-icon">✎</span><span class="quick-tag">CREATIVE WRITING</span><h3>Songtext schreiben</h3><p>Finde die richtigen Worte für deinen nächsten Hit.</p><b>Text erstellen ↗</b></button>
+        <button class="quick-card orange" id="addTrackCard"><span class="quick-icon">＋</span><span class="quick-tag">PRODUCTION</span><h3>Neuen Track bauen</h3><p>Instrumente hinzufügen und deinen Sound formen.</p><b>Studio öffnen ↗</b></button>
+      </div>
+      <div class="section-heading"><div><h2>Dein Musikstudio</h2><p>Arbeite mit Spuren, Sounds und eigenen Aufnahmen.</p></div><div class="transport"><button id="stopBtn">■</button><button class="play-button" id="playBtn">▶</button><span id="timeDisplay">00:00</span><span class="bpm-control"><input id="bpm" type="number" min="40" max="220" value="120"> BPM</span></div></div>
+      <div class="studio-panel">
+        <div class="studio-toolbar"><div class="tool-group"><button class="tool active">↖ Auswahl</button><button class="tool" id="drawTool">⌁ Zeichnen</button></div><div class="tool-group"><button class="tool" id="addTrack">＋ Spur hinzufügen</button><label class="tool upload-label">⇧ Audio importieren<input type="file" id="audioUpload" accept="audio/*" hidden></label></div></div>
+        <div class="timeline-head"><div class="track-label">SPUR</div><div class="ruler" id="ruler"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div></div>
+        <div id="tracks" class="tracks"></div>
+        <div class="studio-footer"><span id="trackCount">3 Spuren</span><span>♪ 44.1 kHz · Stereo</span><span class="autosave">● Lokal gespeichert</span></div>
+      </div>
+      <div class="section-heading lower"><div><h2>Instrumente & Sounds</h2><p>Wähle einen Sound und spiele eine kleine Phrase.</p></div></div>
+      <div class="instrument-grid">
+        <button class="instrument" data-instrument="Piano"><span>🎹</span><strong>Grand Piano</strong><small>Keys · Melodie</small></button>
+        <button class="instrument" data-instrument="Bass"><span>🎸</span><strong>Deep Bass</strong><small>Bass · Groove</small></button>
+        <button class="instrument" data-instrument="Synth"><span>🎛️</span><strong>Analog Synth</strong><small>Lead · Pad</small></button>
+        <button class="instrument" data-instrument="Drums"><span>🥁</span><strong>Drum Machine</strong><small>Beat · Rhythmus</small></button>
+      </div>
+    </section>
+    <section class="view" id="view-generator">
+      <div class="page-intro"><div class="eyebrow">ARTIFICIAL INTELLIGENCE</div><h1>Dein Song. <span>Deine Vision.</span></h1><p>Beschreibe, was du hören möchtest. Die KI macht daraus Musik.</p></div>
+      <div class="generator-layout"><form id="generatorForm" class="glass-card generator-form">
+        <label>Wie soll dein Song klingen?</label><textarea id="songPrompt" required minlength="8" placeholder="Ein emotionaler Pop-Song über eine Sommernacht in Berlin, mit kraftvollem Refrain, warmen Synthesizern und moderner Produktion …"></textarea>
+        <div class="form-row"><div><label>Musikgenre</label><select id="genre"><option>Pop</option><option>Rap / Hip-Hop</option><option>Rock</option><option>EDM / Techno</option><option>Schlager</option><option>R&B / Soul</option><option>Jazz</option><option>Klassik</option><option>Lo-Fi</option><option>Metal</option><option>Country</option><option>Soundtrack</option></select></div><div><label>Stimmung</label><select id="mood"><option>Emotional</option><option>Fröhlich</option><option>Energetisch</option><option>Melancholisch</option><option>Düster</option><option>Entspannt</option><option>Episch</option><option>Romantisch</option></select></div></div>
+        <div class="form-row"><div><label>Gesang</label><select id="vocals"><option>Mit Gesang</option><option>Männliche Stimme</option><option>Weibliche Stimme</option><option>Duett</option><option>Instrumental</option></select></div><div><label>Länge</label><select id="duration"><option value="30">30 Sekunden</option><option value="60">1 Minute</option><option value="120">2 Minuten</option><option value="180">3 Minuten</option></select></div></div>
+        <button class="primary-button" type="submit" id="generateBtn">✧ Song mit KI generieren <span>→</span></button><p class="form-note">Die echte Generierung benötigt einen konfigurierten KI-Musikdienst. Ohne API läuft das Studio im Demo-Modus.</p>
+      </form><div class="glass-card generation-info"><div class="ai-orb">♫</div><h3>Aus deiner Idee wird Musik.</h3><p>Wähle Genre, Stimmung und Stimme. Deine Songidee wird an das konfigurierte Musikmodell gesendet.</p><div class="feature-line">✦ <span>Individuelle Musikideen</span></div><div class="feature-line">♫ <span>Gesang und Instrumental</span></div><div class="feature-line">◈ <span>Deine Projekte an einem Ort</span></div><div class="result-box" id="generationResult"><div class="result-title">DEIN GENERIERTER TRACK</div><p>Noch kein Song generiert.</p></div></div></div>
+    </section>
+    <section class="view" id="view-lyrics">
+      <div class="page-intro"><div class="eyebrow">LYRIC LAB</div><h1>Finde deine <span>Worte.</span></h1><p>Entwickle aus einer Idee einen Songtext mit Struktur und Hook.</p></div>
+      <div class="glass-card lyrics-card"><label>Worum geht es in deinem Song?</label><textarea id="lyricIdea" placeholder="Zum Beispiel: Freundschaft, Neuanfang, eine lange Partynacht …"></textarea><div class="form-row"><div><label>Stil</label><select id="lyricStyle"><option>Pop</option><option>Rap</option><option>Rock</option><option>Schlager</option><option>R&B</option><option>Indie</option></select></div><div><label>Sprache</label><select id="lyricLanguage"><option>Deutsch</option><option>Englisch</option></select></div></div><button class="primary-button" id="writeLyrics">✎ Songtext erstellen <span>→</span></button><div class="lyrics-output" id="lyricsOutput" contenteditable="true">Dein Songtext erscheint hier. Du kannst ihn direkt bearbeiten.</div><button class="secondary-button" id="copyLyrics">Text kopieren</button></div>
+    </section>
+    <section class="view" id="view-library">
+      <div class="page-intro"><div class="eyebrow">YOUR COLLECTION</div><h1>Deine <span>Musik.</span></h1><p>Gespeicherte Projekte und generierte Tracks.</p></div><div class="library-list" id="libraryList"></div>
+    </section>
+    <footer>KI-Musikstudio <span>·</span> Deine kreative Freiheit beginnt hier.</footer>
+  </main>
+</div>
+<script src="/app.js"></script>
+</body></html>
