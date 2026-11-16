@@ -47,29 +47,15 @@ app.post("/api/generate", async (req, res) => {
     if (!instrumental && (cleanLyrics.length < 10 || cleanLyrics.length > 3500)) {
       return res.status(400).json({ error: "Für einen Song mit Gesang werden 10 bis 3.500 Zeichen Liedtext benötigt." });
     }
-    if (instrumental) {
-      const seconds = Math.min(30, Math.max(5, Number(duration) || 15));
-      if (!process.env.REPLICATE_MUSICGEN_VERSION) return res.status(503).json({ error: "Für Instrumental-Tracks fehlt REPLICATE_MUSICGEN_VERSION in Railway." });
-      const prediction = await fetch("https://api.replicate.com/v1/predictions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${process.env.REPLICATE_API_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          version: process.env.REPLICATE_MUSICGEN_VERSION,
-          input: {
-            model_version: "stereo-large", output_format: "mp3",
-            normalization_strategy: "peak",
-            prompt: [prompt, `Genre: ${genre}`, `Stimmung: ${mood}`, "Instrumental, no vocals"].join(". "),
-            duration: seconds
-          }
-        })
-      });
-      const data = await prediction.json();
-      if (!prediction.ok) return res.status(prediction.status).json({ error: data.detail || data.error || "MusicGen-Anfrage fehlgeschlagen." });
-      return res.json({ id: data.id, status: data.status, pollUrl: `/api/generate/${data.id}` });
+    const finalLyrics = instrumental
+      ? `[Inst]\\n(${prompt || genre + " " + mood} — instrumental only, no vocals, full musical arrangement)`
+      : cleanLyrics;
+    if (!instrumental && (cleanLyrics.length < 10 || cleanLyrics.length > 3500)) {
+      return res.status(400).json({ error: "Für einen Song mit Gesang werden 10 bis 3.500 Zeichen Liedtext benötigt." });
     }
 
     const input = {
-      lyrics: cleanLyrics,
+      lyrics: finalLyrics,
       prompt: description.slice(0, 2000),
       sample_rate: 44100,
       bitrate: 256000,
