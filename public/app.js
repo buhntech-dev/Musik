@@ -94,24 +94,33 @@ $("copyLyrics").onclick=async()=>{await navigator.clipboard.writeText($("lyricsO
 $("generatorForm").onsubmit=async e=>{
  e.preventDefault();
  const btn=$("generateBtn"),result=$("generationResult");
+ const instrumental=$("vocals").value==="Instrumental";
+ const lyrics=$("songLyrics").value.trim();
+ if(!instrumental&&lyrics.length<10){result.innerHTML='<div class="result-title">LIEDTEXT FEHLT</div><p>Bitte füge einen Liedtext mit Strophe und Refrain ein. Du kannst ihn links unter „Songtexte“ erstellen.</p>';return;}
  btn.disabled=true;btn.textContent="✧ Anfrage wird gestartet …";
  result.innerHTML='<div class="result-title">KI GENERIERT DEINEN SONG</div><p>Verbindung zum Musikdienst wird hergestellt …</p>';
  try{
-  const response=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:$("songPrompt").value,genre:$("genre").value,mood:$("mood").value,vocals:$("vocals").value,duration:Number($("duration").value)})});
+  const response=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+   prompt:$("songPrompt").value,lyrics,genre:$("genre").value,mood:$("mood").value,
+   vocals:$("vocals").value,duration:Number($("duration").value),instrumental,
+   language:$("songLanguage").value,title:$("songTitle").value||"Mein KI-Song"
+  })});
   const data=await response.json();
   if(!response.ok)throw new Error(data.error||"Generierung nicht verfügbar.");
-  result.innerHTML='<div class="result-title">GENERIERUNG GESTARTET</div><p>Dein Track wird erstellt. Status: <b id="jobStatus">queued</b></p>';
-  let status="starting";
-  while(!["succeeded","failed","canceled"].includes(status)){
-   await new Promise(r=>setTimeout(r,3500));
-   const poll=await fetch(data.pollUrl),job=await poll.json();if(!poll.ok)throw new Error(job.error||"Statusabfrage fehlgeschlagen.");
-   status=job.status;$("jobStatus").textContent=status;
-   if(status==="succeeded"){
-    const urls=Array.isArray(job.output)?job.output:[job.output];
-    result.innerHTML='<div class="result-title">DEIN TRACK IST FERTIG</div>'+urls.filter(x=>typeof x==="string").map(url=>`<audio controls src="${escapeHtml(url)}" style="width:100%;margin:10px 0"></audio><a href="${escapeHtml(url)}" target="_blank" rel="noopener">Audio herunterladen ↗</a>`).join("<br>");
-   }
-   if(status==="failed"||status==="canceled")throw new Error(job.error||"Die Generierung wurde beendet.");
+  result.innerHTML='<div class="result-title">GENERIERUNG LÄUFT</div><p>Dein Song wird erstellt. Status: <b id="jobStatus">starting</b></p>';
+  let status=data.status||"starting",job={};
+  for(let i=0;i<180&&!['succeeded','failed','canceled'].includes(status);i++){
+   await new Promise(r=>setTimeout(r,4000));
+   const poll=await fetch(data.pollUrl);job=await poll.json();if(!poll.ok)throw new Error(job.error||"Statusabfrage fehlgeschlagen.");
+   status=job.status;const statusNode=$("jobStatus");if(statusNode)statusNode.textContent=status;
   }
+  if(status==="succeeded"){
+   const outputs=Array.isArray(job.output)?job.output:[job.output];
+   const urls=outputs.map(x=>typeof x==="string"?x:x?.url).filter(x=>typeof x==="string"&&/^https:\/\//.test(x));
+   if(!urls.length)throw new Error("Die KI hat keinen abspielbaren Audio-Link zurückgegeben.");
+   result.innerHTML='<div class="result-title">DEIN SONG IST FERTIG</div>'+urls.map(url=>`<audio controls src="${escapeHtml(url)}" style="width:100%;margin:10px 0"></audio><a href="${escapeHtml(url)}" target="_blank" rel="noopener">Audio herunterladen ↗</a>`).join("<br>");
+  }else if(status==="failed"||status==="canceled")throw new Error(job.error||"Die Generierung wurde beendet.");
+  else throw new Error("Die Generierung dauert länger. Öffne deine Song-Anfrage später erneut.");
  }catch(err){result.innerHTML=`<div class="result-title">HINWEIS</div><p>${escapeHtml(err.message)}</p>`}
  finally{btn.disabled=false;btn.innerHTML='✧ Song mit KI generieren <span>→</span>'}
 };
