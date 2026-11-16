@@ -1,18 +1,18 @@
 # KI-Musikstudio 🎧
 
-Ein modernes, deutschsprachiges KI-Musikstudio im Browser. Songs planen, Texte entwerfen, Instrumente ausprobieren, Audiodateien importieren und Projekte lokal speichern.
+Ein deutschsprachiges KI-Musikstudio mit Songgenerator, Songtext-Assistent, Instrumenten und Mehrspur-Editor.
 
-## Funktionen
+## KI-Funktionen
 
-- **KI-Instrumental-Generator:** Prompt, Genre, Stimmung und Dauer konfigurieren. Echte Audio-Generierung über Replicate / Meta MusicGen.
-- **Songtext-Assistent:** Erstellt einen editierbaren Songtext mit Strophen, Refrain und Bridge.
-- **Studio / DAW:** Mehrspur-Timeline, Spuren hinzufügen und entfernen, Audio importieren und Sounds im Browser abspielen.
-- **Instrumente:** Browser-Synthesizer-Klänge für Piano, Bass, Lead und Drum-Pattern.
-- **Projektverwaltung:** Projekte lokal im Browser speichern und wieder öffnen.
+- **MiniMax Music 2.5 via Replicate:** vollständige Songs mit Gesang, Liedtext und Instrumenten.
+- **Stimmen:** männlich, weiblich oder Duett als Regieanweisung im Prompt.
+- **Songtexte:** Songtext-Assistent mit Strophen, Refrain und Bridge; Texte können im Generator bearbeitet/eingefügt werden.
+- **Instrumental:** Der Musikdienst kann mit einer Instrumental-Anweisung genutzt werden.
+- **Studio:** Mehrspur-Timeline, Audioimport, Browser-Instrumente und lokale Projektverwaltung.
 
-> **Wichtig zur KI:** Meta MusicGen erzeugt Instrumentalmusik, keine fertig gesungenen Songs mit echten Gesangsstimmen. Der Songtext-Assistent ist separat. Für vollständige Songs mit KI-Gesang braucht das Projekt zusätzlich ein geeignetes Text-to-Song-Modell. MusicGen-Ausgaben sind hier auf 5–30 Sekunden begrenzt. Prüfe vor kommerzieller Nutzung die Modelllizenz.
+Hinweis: Die Aussprachequalität auf Deutsch kann variieren. Laut Modelldokumentation sind Englisch und Mandarin besonders gut unterstützt. Die Stimme ist synthetisch, kein Klon einer realen Person.
 
-## Schnellstart
+## Lokal starten
 
 Voraussetzung: Node.js 20 oder neuer.
 
@@ -22,30 +22,23 @@ cp .env.example .env
 npm start
 ```
 
-Dann http://localhost:3000 öffnen.
+Öffne http://localhost:3000.
 
 ## KI aktivieren
 
-1. Erstelle einen Account bei [Replicate](https://replicate.com/).
-2. Erzeuge unter [API Tokens](https://replicate.com/account/api-tokens) einen API-Token.
-3. Hinterlege diese Variablen in Railway (oder lokal in `.env`):
+1. Registriere dich bei https://replicate.com/.
+2. Erstelle einen privaten API-Token unter https://replicate.com/account/api-tokens.
+3. Füge in Railway unter Service → Variables die Variable REPLICATE_API_TOKEN mit deinem privaten Token hinzu.
+4. Railway deployt die App erneut.
 
-| Variable | Wert |
-|---|---|
-| `REPLICATE_API_TOKEN` | Dein privater Replicate-Token |
-| `REPLICATE_MODEL_VERSION` | `671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb` |
-| `REPLICATE_EXTRA_INPUT_JSON` | `{"model_version":"stereo-large","output_format":"mp3","normalization_strategy":"peak"}` |
+Den Token niemals in GitHub oder in Browser-Dateien eintragen.
 
-Der Token bleibt serverseitig und darf niemals in GitHub oder im Browser-Code gespeichert werden.
-
-MusicGen läuft auf GPU-Hardware. Replicate berechnet die Generierung nach Nutzung; die Modellseite nennt ungefähr 0,10 US-Dollar pro Lauf, abhängig von Eingaben und tatsächlicher Laufzeit. Prüfe den aktuellen Preis vor der Nutzung.
-
-Modell: [Replicate – meta/musicgen](https://replicate.com/meta/musicgen)
+Modell: https://replicate.com/minimax/music-2.5. Das Modell nimmt Liedtext (bis 3.500 Zeichen) und eine Stilbeschreibung entgegen und liefert Audio zurück. Prüfe aktuelle Modellpreise und Nutzungsbedingungen vor der Nutzung.
 
 ## Deployment
 
-Startbefehl: `npm start`. Railway setzt `PORT` automatisch.
+Railway verwendet den Startbefehl npm start und stellt PORT automatisch bereit.
 
 ## Datenschutz
 
-Projekte und importierte Audiodateien bleiben im Browser (Local Storage / Arbeitsspeicher), solange keine eigene Datenbank ergänzt wird.
+Der Replicate-Token bleibt serverseitig. Projekte und importierte Audiodateien werden lokal im Browser gespeichert bzw. verarbeitet. Für Mehrbenutzerkonten und Cloud-Projekte ist später eine Datenbank erforderlich.
