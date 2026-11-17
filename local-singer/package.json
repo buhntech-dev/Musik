@@ -1,0 +1,8 @@
+{
+  "name": "musik-ai-local-singer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "yaml": "^2.8.3" }
+}
