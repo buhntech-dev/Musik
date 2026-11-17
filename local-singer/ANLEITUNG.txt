@@ -1,0 +1,26 @@
+KOSTENLOSE KI-SINGSTIMME – WINDOWS
+
+WICHTIG:
+Diese lokale Verbindung erzeugt ein echtes OpenUtau-Projekt mit Melodie und Liedtext.
+OpenUtau/DiffSinger rendert daraus die echte KI-Singstimme. Das Musikstudio auf Railway
+kann nicht selbst auf Dateien oder Programme deines PCs zugreifen; deshalb muss dieses
+kleine Hilfsprogramm auf deinem PC laufen.
+
+1. Node.js LTS installieren: https://nodejs.org/
+2. OpenUtau installieren: https://www.openutau.com/
+   Für DiffSinger wird unter Windows Windows 10 oder neuer benötigt.
+3. In OpenUtau eine DiffSinger-Stimme installieren, die Deutsch unterstützt.
+   Die Sprache hängt von der Stimme ab. Nicht jede Stimme kann Deutsch singen.
+4. Diesen Ordner "local-singer" auf deinen PC herunterladen und entpacken.
+5. start.bat doppelklicken und das schwarze Fenster geöffnet lassen.
+6. Musikstudio öffnen: https://musik-production-b790f40b.up.railway.app/
+7. Songtext und Melodie erzeugen. Das Studio überträgt das Projekt an OpenUtau.
+8. In OpenUtau die installierte deutsche Stimme auswählen, alle Noten markieren
+   und über Datei > WAV exportieren.
+
+Hinweis: Das erste Setup benötigt Downloads. Die lokale Synthese selbst benötigt
+keinen Replicate- oder sonstigen API-Schlüssel. Railway-Hosting kann unabhängig
+davon eigene Kosten oder Limits haben.
+
+Wenn OpenUtau nicht automatisch gefunden wird, kann der Pfad zur OpenUtau.exe
+als Umgebungsvariable OPENUTAU_EXE gesetzt werden.
